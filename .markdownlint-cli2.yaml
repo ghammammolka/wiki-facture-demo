@@ -1,0 +1,16 @@
+config:
+  default: true
+  # Les phrases ne sont pas coupées à une longueur fixe : plus simple pour les contributeurs.
+  MD013: false
+  # Le titre est dans les métadonnées ET en titre de niveau 1 : on n'en tient pas compte.
+  MD025:
+    front_matter_title: ""
+  MD024:
+    siblings_only: true
+  MD033: false
+  MD046: false
+  MD060: false
+ignores:
+  - "public/**"
+  - "site/**"
+  - "node_modules/**"

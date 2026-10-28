@@ -1,0 +1,69 @@
+site_name: Mini WikiFacture
+site_description: Référentiel documentaire de démonstration — chaque objet d'une facture expliqué
+site_author: Molka Ghammam
+docs_dir: docs
+strict: true
+
+theme:
+  name: material
+  language: fr
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Passer en mode sombre
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Passer en mode clair
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+    - content.action.edit
+
+plugins:
+  - search:
+      lang: fr
+  - tags
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+  links:
+    not_found: warn
+    anchors: warn
+
+nav:
+  - Accueil: index.md
+  - Objets de la facture:
+      - objets/index.md
+      - En-tête:
+          - Numéro de facture: objets/numero-facture.md
+          - Date d'émission: objets/date-emission.md
+      - Client:
+          - Adresse e-mail: objets/adresse-email.md
+          - Adresse de facturation: objets/adresse-facturation.md
+      - Paiement:
+          - Montant TTC: objets/montant-ttc.md
+          - Date d'échéance: objets/date-echeance.md
+          - Mode de paiement: objets/mode-paiement.md
+  - Contribuer:
+      - Guide de contribution: contribuer/index.md
+      - Modèle de page: contribuer/modele.md
+      - Conventions: contribuer/conventions.md

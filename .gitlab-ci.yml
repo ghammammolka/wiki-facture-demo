@@ -1,0 +1,59 @@
+# Pipeline du Mini WikiFacture
+#   - sur une merge request : contrôles qualité + construction du site (sans publication)
+#   - sur la branche principale : contrôles qualité + publication sur GitLab Pages
+
+stages:
+  - qualite
+  - construction
+  - publication
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+default:
+  image: python:3.12-slim
+  cache:
+    key: pip
+    paths:
+      - .cache/pip
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+lint-markdown:
+  stage: qualite
+  image: node:20-alpine
+  cache: []
+  script:
+    - npx --yes markdownlint-cli2 "docs/**/*.md" "README.md"
+
+verifier-modele-et-liens:
+  stage: qualite
+  script:
+    - pip install -q pyyaml
+    - python scripts/verifier_pages.py
+
+construire-site:
+  stage: construction
+  script:
+    - pip install -q -r requirements.txt
+    - mkdocs build --strict --site-dir public
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 week
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+pages:
+  stage: publication
+  script:
+    - pip install -q -r requirements.txt
+    - mkdocs build --strict --site-dir public
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
