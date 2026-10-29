@@ -36,5 +36,5 @@ Toujours.
 
 ## Voir aussi
 
-- [Date d'échéance](date-echeance.md)
+- [Date d'échéance](date-echeanse.md)
 - [Mode de paiement](mode-paiement.md)
