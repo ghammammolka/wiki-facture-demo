@@ -1,0 +1,46 @@
+# Même pipeline que .gitlab-ci.yml, version GitHub Actions + GitHub Pages
+name: Qualité et publication
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  qualite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Lint Markdown
+        run: npx --yes markdownlint-cli2 "docs/**/*.md" "README.md"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Vérifier le modèle et les liens
+        run: |
+          pip install -q -r requirements.txt
+          python scripts/verifier_pages.py
+      - name: Construire le site
+        run: mkdocs build --strict --site-dir public
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  publication:
+    if: github.ref == 'refs/heads/main'
+    needs: qualite
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - id: deploiement
+        uses: actions/deploy-pages@v4
