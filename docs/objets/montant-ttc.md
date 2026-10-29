@@ -32,7 +32,7 @@ Toujours.
 
 ## Exemple
 
-`42,99 €`
+`45,99 €`
 
 ## Voir aussi
 
